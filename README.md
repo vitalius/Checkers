@@ -1,0 +1,4 @@
+Checkers
+========
+
+Simple Android checkers
