@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="redcheckerfill">#FF0000</string>
+    <string name="redcheckerborder">#FF5555</string>
+</resources>
