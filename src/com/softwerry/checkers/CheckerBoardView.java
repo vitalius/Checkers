@@ -45,6 +45,8 @@ public class CheckerBoardView extends View {
     public int tx = 0;
     public int ty = 0;
 
+    private static final String TAG = "CheckerBoardView";
+
     /**
      * Instantiate board View, given the screen size and activity context
      *
@@ -81,7 +83,8 @@ public class CheckerBoardView extends View {
             }
 
             private int getSquareRow(MotionEvent event) {
-                int x = (int) Math.round((event.getX() - tx - squareWidth / 2.0) / (float) squareWidth);
+                float xPos = event.getRawX();
+                int x = (int) Math.floor((xPos - tx - squareWidth / 2.0) / (float) squareWidth);
                 if (x < 0 || x >= squaresPerSide) {
                     return -1;
                 }
@@ -89,7 +92,8 @@ public class CheckerBoardView extends View {
             }
 
             private int getSquareCol(MotionEvent event) {
-                int y = (int) Math.round((event.getY() - ty - squareWidth / 2.0) / (float) squareWidth);
+                float yPos = event.getRawY();
+                int y = (int) Math.floor((yPos - ty - squareWidth / 2.0) / (float) squareWidth);
                 if (y < 0 || y >= squaresPerSide) {
                     return -1;
                 }

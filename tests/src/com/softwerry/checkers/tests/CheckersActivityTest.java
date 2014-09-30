@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.softwerry.checkers.tests;
 
 import android.test.ActivityInstrumentationTestCase2;
@@ -66,8 +65,11 @@ public class CheckersActivityTest extends ActivityInstrumentationTestCase2<Simpl
         int clickRow = 2;
         int clickCol = 5;
 
-        MotionEvent click = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN,
-                getXlocForRow(clickRow), getYlocForCol(clickCol), 0);
+        int xPos = getXlocForRow(clickRow);
+        int yPos = getYlocForCol(clickCol);
+
+        MotionEvent click = MotionEvent.obtain(
+                1000, 1000, MotionEvent.ACTION_DOWN, xPos, yPos, 0);
         decorView.dispatchTouchEvent(click);
 
         assertSame("First checker is not selected.",
