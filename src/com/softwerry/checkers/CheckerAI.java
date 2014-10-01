@@ -33,6 +33,7 @@ public final class CheckerAI {
 
     /**
      * Very dump AI, randomly picks a checker and randomly moves it
+     *
      * @param e current game which contains current game state
      * @param isRed flag for red or black side
      */
@@ -59,8 +60,9 @@ public final class CheckerAI {
 
     /**
      * Returns all currently highlighted next possible steps on the board
+     *
      * @param e current game which contains current game state
-     * @return 
+     * @return
      */
     public LinkedList<int[]> nextStep(GameEngine e) {
         LinkedList<int[]> result = new LinkedList<int[]>();
@@ -86,11 +88,11 @@ public final class CheckerAI {
         LinkedList<int[]> result = new LinkedList<int[]>();
         for (int row = 0; row < e.squaresPerSide; row++) {
             for (int col = 0; col < e.squaresPerSide; col++) {
-                if (isRed && isRed(e, row, col)
+                if (isRed && e.isRed(row, col)
                         && validRedMoves(e, row, col)) {
                     result.add(new int[]{row, col});
                 }
-                if (!isRed && isBlack(e, row, col)
+                if (!isRed && e.isBlack(row, col)
                         && validBlackMoves(e, row, col)) {
                     result.add(new int[]{row, col});
                 }
@@ -125,17 +127,17 @@ public final class CheckerAI {
         }
 
         // check jump moves
-        if (isRed(e, row - 1, col + 1) && e.isEmpty(row - 2, col + 2)) {
+        if (e.isRed(row - 1, col + 1) && e.isEmpty(row - 2, col + 2)) {
             return true;
         }
-        if (isRed(e, row + 1, col + 1) && e.isEmpty(row + 2, col + 2)) {
+        if (e.isRed(row + 1, col + 1) && e.isEmpty(row + 2, col + 2)) {
             return true;
         }
         if (e.At(row, col) == GameEnum.BLACK_CHECKER_S) {
-            if (isRed(e, row - 1, col - 1) && e.isEmpty(row - 2, col - 2)) {
+            if (e.isRed(row - 1, col - 1) && e.isEmpty(row - 2, col - 2)) {
                 return true;
             }
-            if (isRed(e, row + 1, col - 1) && e.isEmpty(row + 2, col - 2)) {
+            if (e.isRed(row + 1, col - 1) && e.isEmpty(row + 2, col - 2)) {
                 return true;
             }
         }
@@ -168,51 +170,19 @@ public final class CheckerAI {
         }
 
         // check jump moves
-        if (isBlack(e, row - 1, col - 1) && e.isEmpty(row - 2, col - 2)) {
+        if (e.isBlack(row - 1, col - 1) && e.isEmpty(row - 2, col - 2)) {
             return true;
         }
-        if (isBlack(e, row + 1, col - 1) && e.isEmpty(row + 2, col - 2)) {
+        if (e.isBlack(row + 1, col - 1) && e.isEmpty(row + 2, col - 2)) {
             return true;
         }
         if (e.At(row, col) == GameEnum.RED_CHECKER_S) {
-            if (isBlack(e, row - 1, col - 1) && e.isEmpty(row - 2, col - 2)) {
+            if (e.isBlack(row - 1, col - 1) && e.isEmpty(row - 2, col - 2)) {
                 return true;
             }
-            if (isBlack(e, row + 1, col - 1) && e.isEmpty(row + 2, col - 2)) {
+            if (e.isBlack(row + 1, col - 1) && e.isEmpty(row + 2, col - 2)) {
                 return true;
             }
-        }
-        return false;
-    }
-
-    /**
-     * Is given cell a Red checker
-     *
-     * @param e current game which contains current game state
-     * @param row
-     * @param col
-     * @return
-     */
-    public boolean isRed(GameEngine e, int row, int col) {
-        if (e.At(row, col) == GameEnum.RED_CHECKER
-                || e.At(row, col) == GameEnum.RED_CHECKER_S) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Is given cell a Black checker
-     *
-     * @param e current game which contains current game state
-     * @param row
-     * @param col
-     * @return
-     */
-    public boolean isBlack(GameEngine e, int row, int col) {
-        if (e.At(row, col) == GameEnum.BLACK_CHECKER
-                || e.At(row, col) == GameEnum.BLACK_CHECKER_S) {
-            return true;
         }
         return false;
     }

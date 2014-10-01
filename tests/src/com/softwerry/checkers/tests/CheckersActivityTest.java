@@ -28,7 +28,9 @@ import android.test.UiThreadTest;
 import android.test.suitebuilder.annotation.MediumTest;
 import android.view.MotionEvent;
 import android.view.View;
+import com.softwerry.checkers.CheckerBoardView;
 import com.softwerry.checkers.GameEnum;
+import com.softwerry.checkers.R;
 import com.softwerry.checkers.SimpleCheckersActivity;
 
 /**
@@ -37,6 +39,7 @@ import com.softwerry.checkers.SimpleCheckersActivity;
 public class CheckersActivityTest extends ActivityInstrumentationTestCase2<SimpleCheckersActivity> {
 
     private SimpleCheckersActivity checkersActivity;
+    private CheckerBoardView checkerBoardView;
 
     public CheckersActivityTest() {
         super(SimpleCheckersActivity.class);
@@ -46,6 +49,7 @@ public class CheckersActivityTest extends ActivityInstrumentationTestCase2<Simpl
     protected void setUp() throws Exception {
         super.setUp();
         checkersActivity = getActivity();
+        checkerBoardView = (CheckerBoardView) checkersActivity.findViewById(R.id.checkerView);
     }
 
     @Override
@@ -55,7 +59,7 @@ public class CheckersActivityTest extends ActivityInstrumentationTestCase2<Simpl
 
     @MediumTest
     public void testPreconditions() {
-        assertNotNull("Game view is null.", checkersActivity.board);
+        assertNotNull("Game view is null.", checkerBoardView);
     }
 
     @UiThreadTest
@@ -74,26 +78,38 @@ public class CheckersActivityTest extends ActivityInstrumentationTestCase2<Simpl
 
         assertSame("First checker is not selected.",
                 GameEnum.RED_CHECKER_H,
-                checkersActivity.board.gameEngine.getState()[clickRow][clickCol]);
+                checkerBoardView.gameEngine.getState()[clickRow][clickCol]);
 
         assertSame("Next move is not highlighted.",
                 GameEnum.EMPTY_NEXT,
-                checkersActivity.board.gameEngine.getState()[clickRow - 1][clickCol - 1]);
+                checkerBoardView.gameEngine.getState()[clickRow - 1][clickCol - 1]);
         assertSame("Next move is not highlighted.",
                 GameEnum.EMPTY_NEXT,
-                checkersActivity.board.gameEngine.getState()[clickRow + 1][clickCol - 1]);
+                checkerBoardView.gameEngine.getState()[clickRow + 1][clickCol - 1]);
         decorView.invalidate();
     }
 
     public int getXlocForRow(int row) {
-        return checkersActivity.board.tx
-                + checkersActivity.board.squareWidth * row
-                + (int) (checkersActivity.board.squareWidth / 2.0);
+        return checkerBoardView.tx
+                + checkerBoardView.squareWidth * row
+                + (int) (checkerBoardView.squareWidth / 2.0);
     }
 
     public int getYlocForCol(int col) {
-        return checkersActivity.board.ty
-                + checkersActivity.board.squareWidth * col
-                + (int) (checkersActivity.board.squareWidth / 2.0);
+        return checkerBoardView.ty
+                + checkerBoardView.squareWidth * col
+                + (int) (checkerBoardView.squareWidth / 2.0);
+    }
+
+    @UiThreadTest
+    public void testScoreStrings() {
+        // default score
+        assertTrue("Red score string invalid",
+                SimpleCheckersActivity.redScore.getText().toString()
+                .equals("Red score: 0"));
+
+        assertTrue("Black score string invalid",
+                SimpleCheckersActivity.blackScore.getText().toString()
+                .equals("Black score: 0"));
     }
 }

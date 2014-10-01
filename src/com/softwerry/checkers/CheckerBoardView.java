@@ -26,6 +26,7 @@ package com.softwerry.checkers;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -45,17 +46,14 @@ public class CheckerBoardView extends View {
     public int tx = 0;
     public int ty = 0;
 
-    private static final String TAG = "CheckerBoardView";
-
     /**
      * Instantiate board View, given the screen size and activity context
-     *
-     * @param context
-     * @param width screen width in pixels
-     * @param height screen height in pixels
      */
-    public CheckerBoardView(Context context, int width, int height) {
-        super(context);
+    public CheckerBoardView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+
+        int width = SimpleCheckersActivity.SCREEN_X;
+        int height = SimpleCheckersActivity.SCREEN_Y;
 
         int minSide = Math.min(width, height);
         squareWidth = (int) Math.floor(minSide / (float) squaresPerSide);
@@ -118,9 +116,8 @@ public class CheckerBoardView extends View {
             }
         }
 
-        //canvas.drawBitmap(squareFactory.GenBlackScore(gameEngine),
-        //        tx, ty - squareWidth, paint);
-        //canvas.drawBitmap(squareFactory.GenRedScore(gameEngine),
-        //        tx, ty + squaresPerSide * squareWidth, paint);
+        // update the score
+        SimpleCheckersActivity.redScore.setText("Red score: " + gameEngine.getRedScore());
+        SimpleCheckersActivity.blackScore.setText("Black score: " + gameEngine.getBlackScore());
     }
 }

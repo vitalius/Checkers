@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.softwerry.checkers;
 
 /**
@@ -378,5 +377,67 @@ public final class GameEngine {
      */
     public GameEnum[][] getState() {
         return gameState;
+    }
+
+    /**
+     * Is given cell a Red checker
+     *
+     * @param row
+     * @param col
+     * @return
+     */
+    public boolean isRed(int row, int col) {
+        return At(row, col) == GameEnum.RED_CHECKER
+                || At(row, col) == GameEnum.RED_CHECKER_H
+                || At(row, col) == GameEnum.RED_CHECKER_S
+                || At(row, col) == GameEnum.RED_CHECKER_S_H;
+    }
+
+    /**
+     * Is given cell a Black checker
+     *
+     * @param row
+     * @param col
+     * @return
+     */
+    public boolean isBlack(int row, int col) {
+        return At(row, col) == GameEnum.BLACK_CHECKER
+                || At(row, col) == GameEnum.BLACK_CHECKER_H
+                || At(row, col) == GameEnum.BLACK_CHECKER_S
+                || At(row, col) == GameEnum.BLACK_CHECKER_S_H;
+    }
+
+    /**
+     * Returns black side score
+     *
+     * @return
+     */
+    public int getBlackScore() {
+        int score = 12;
+        for (int row = 0; row < squaresPerSide; row++) {
+            for (int col = 0; col < squaresPerSide; col++) {
+                if (isRed(row, col)) {
+                    score--;
+                }
+            }
+        }
+        return score;
+    }
+
+    /**
+     * Returns red side score
+     *
+     * @return
+     */
+    public int getRedScore() {
+        int score = 12;
+        for (int row = 0; row < squaresPerSide; row++) {
+            for (int col = 0; col < squaresPerSide; col++) {
+                if (isBlack(row, col)) {
+                    score--;
+                }
+            }
+        }
+        return score;
     }
 }

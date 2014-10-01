@@ -21,19 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.softwerry.checkers;
 
 import android.app.Activity;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.widget.TextView;
 
 /**
  * View for static checker board test
  */
 public class SimpleCheckersActivity extends Activity {
 
-    public CheckerBoardView board;
+    public static int SCREEN_X;
+    public static int SCREEN_Y;
+
+    public static TextView redScore;
+    public static TextView blackScore;
 
     /**
      * Called when the activity is first created.
@@ -43,18 +47,20 @@ public class SimpleCheckersActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         Point screenSize = new Point();
         getWindowManager().getDefaultDisplay().getSize(screenSize);
-        board = new CheckerBoardView(this, screenSize.x, screenSize.y);
-        setContentView(board);
+        SCREEN_X = screenSize.x;
+        SCREEN_Y = screenSize.y;
 
-        //Checker obj = new Checker(this, size.x-25, size.y-25);
-        //setContentView(obj);        
+        setContentView(R.layout.main);
+
+        redScore = (TextView) findViewById(R.id.redScoreText);
+        blackScore = (TextView) findViewById(R.id.blackScoreText);
     }
-    
+
     @Override
     public void finish() {
         super.finish();
-    }    
+    }
 }
