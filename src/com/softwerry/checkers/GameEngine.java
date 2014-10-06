@@ -33,27 +33,41 @@ public final class GameEngine {
      */
     public class CheckerPieces {
 
-        public GameEnum checkerPiece;
+        public Sprite checkerPiece;
         public int row;
         public int col;
     }
 
-    public GameEnum[][] gameState;
-    public final int squaresPerSide = 8;
-    public GameEnum currentPlayer;
-    public CheckerAI randomAI;
+    public Sprite[][] board;
+    public int squaresPerSide = 8;
+    public Sprite currentPlayer;
+    public GameEnum gameState;
 
     public GameEngine() {
-        gameState = GenEmptyBoardState();
-        InitCheckers(gameState);
-        currentPlayer = GameEnum.RED_CHECKER;
-        randomAI = new CheckerAI();
+        StartNewGame(squaresPerSide);
+        currentPlayer = Sprite.RED_CHECKER;
     }
 
-    public GameEngine(GameEnum firstPlayer) {
-        gameState = GenEmptyBoardState();
-        InitCheckers(gameState);
+    public GameEngine(int size) {
+        StartNewGame(size);
+        currentPlayer = Sprite.RED_CHECKER;
+    }
+
+    public GameEngine(Sprite firstPlayer, int size) {
+        StartNewGame(size);
         currentPlayer = firstPlayer;
+    }
+
+    public GameEngine(Sprite firstPlayer) {
+        StartNewGame(squaresPerSide);
+        currentPlayer = firstPlayer;
+    }
+
+    public void StartNewGame(int size) {
+        gameState = GameEnum.PLAY;
+        squaresPerSide = size;
+        board = GenEmptyBoardState();
+        InitCheckers();
     }
 
     /**
@@ -64,68 +78,68 @@ public final class GameEngine {
      * @return
      */
     public boolean Click(int row, int col) {
-        if (!isValid(row, col)) {
+        if (!isValid(row, col) || gameState != GameEnum.PLAY) {
             return false;
         }
 
         // clicked score square?
-        if (At(row, col) == GameEnum.SCORE) {
+        if (At(row, col) == Sprite.SCORE) {
             CheckerPieces p = findPlayer();
-            Set(p.row, p.col, GameEnum.EMPTY);
+            Set(p.row, p.col, Sprite.EMPTY);
             Set(p.row + (int) ((Math.round(row - p.row) / 2.0)),
-                    p.col + (int) (Math.round((col - p.col) / 2.0)), GameEnum.EMPTY);
+                    p.col + (int) (Math.round((col - p.col) / 2.0)), Sprite.EMPTY);
             Set(row, col, p.checkerPiece);
             Upgrade(row, col);
             removeHints();
-            currentPlayer = currentPlayer == GameEnum.BLACK_CHECKER
-                    ? GameEnum.RED_CHECKER : GameEnum.BLACK_CHECKER;
+            currentPlayer = currentPlayer == Sprite.BLACK_CHECKER
+                    ? Sprite.RED_CHECKER : Sprite.BLACK_CHECKER;
             return true;
         }
 
         // clicked highlighted square?
-        if (At(row, col) == GameEnum.EMPTY_NEXT) {
+        if (At(row, col) == Sprite.EMPTY_NEXT) {
             CheckerPieces p = findPlayer();
-            Set(p.row, p.col, GameEnum.EMPTY);
+            Set(p.row, p.col, Sprite.EMPTY);
             Set(row, col, p.checkerPiece);
             Upgrade(row, col);
             removeHints();
-            currentPlayer = currentPlayer == GameEnum.BLACK_CHECKER
-                    ? GameEnum.RED_CHECKER : GameEnum.BLACK_CHECKER;
+            currentPlayer = currentPlayer == Sprite.BLACK_CHECKER
+                    ? Sprite.RED_CHECKER : Sprite.BLACK_CHECKER;
             return true;
         }
 
         // clicked a checker?
-        if (At(row, col) == GameEnum.BLACK_CHECKER
-                && currentPlayer == GameEnum.BLACK_CHECKER) {
+        if (At(row, col) == Sprite.BLACK_CHECKER
+                && currentPlayer == Sprite.BLACK_CHECKER) {
             removeHints();
-            Set(row, col, GameEnum.BLACK_CHECKER_H);
+            Set(row, col, Sprite.BLACK_CHECKER_H);
             renderHints(row, col);
-        } else if (At(row, col) == GameEnum.BLACK_CHECKER_H) {
-            Set(row, col, GameEnum.BLACK_CHECKER);
+        } else if (At(row, col) == Sprite.BLACK_CHECKER_H) {
+            Set(row, col, Sprite.BLACK_CHECKER);
             removeHints();
-        } else if (At(row, col) == GameEnum.RED_CHECKER
-                && currentPlayer == GameEnum.RED_CHECKER) {
+        } else if (At(row, col) == Sprite.RED_CHECKER
+                && currentPlayer == Sprite.RED_CHECKER) {
             removeHints();
-            Set(row, col, GameEnum.RED_CHECKER_H);
+            Set(row, col, Sprite.RED_CHECKER_H);
             renderHints(row, col);
-        } else if (At(row, col) == GameEnum.RED_CHECKER_H) {
-            Set(row, col, GameEnum.RED_CHECKER);
+        } else if (At(row, col) == Sprite.RED_CHECKER_H) {
+            Set(row, col, Sprite.RED_CHECKER);
             removeHints();
-        } else if (At(row, col) == GameEnum.RED_CHECKER_S
-                && currentPlayer == GameEnum.RED_CHECKER) {
+        } else if (At(row, col) == Sprite.RED_CHECKER_S
+                && currentPlayer == Sprite.RED_CHECKER) {
             removeHints();
-            Set(row, col, GameEnum.RED_CHECKER_S_H);
+            Set(row, col, Sprite.RED_CHECKER_S_H);
             renderHints(row, col);
-        } else if (At(row, col) == GameEnum.RED_CHECKER_S_H) {
-            Set(row, col, GameEnum.RED_CHECKER_S);
+        } else if (At(row, col) == Sprite.RED_CHECKER_S_H) {
+            Set(row, col, Sprite.RED_CHECKER_S);
             removeHints();
-        } else if (At(row, col) == GameEnum.BLACK_CHECKER_S
-                && currentPlayer == GameEnum.BLACK_CHECKER) {
+        } else if (At(row, col) == Sprite.BLACK_CHECKER_S
+                && currentPlayer == Sprite.BLACK_CHECKER) {
             removeHints();
-            Set(row, col, GameEnum.BLACK_CHECKER_S_H);
+            Set(row, col, Sprite.BLACK_CHECKER_S_H);
             renderHints(row, col);
-        } else if (At(row, col) == GameEnum.BLACK_CHECKER_S_H) {
-            Set(row, col, GameEnum.BLACK_CHECKER_S);
+        } else if (At(row, col) == Sprite.BLACK_CHECKER_S_H) {
+            Set(row, col, Sprite.BLACK_CHECKER_S);
             removeHints();
         }
         return false;
@@ -140,138 +154,138 @@ public final class GameEngine {
      *
      * @param row in the checker board
      * @param col in the checker board
-     * @return GameEnum
+     * @return Sprite
      */
-    public GameEnum At(int row, int col) {
+    public Sprite At(int row, int col) {
         if (isValid(row, col)) {
-            return gameState[row][col];
+            return board[row][col];
         } else {
-            return GameEnum.INVALID;
+            return Sprite.INVALID;
         }
     }
 
-    public boolean Set(int row, int col, GameEnum s) {
+    public boolean Set(int row, int col, Sprite s) {
         if (isValid(row, col)) {
-            gameState[row][col] = s;
+            board[row][col] = s;
             return true;
         }
         return false;
     }
 
     public boolean isEmpty(int row, int col) {
-        return At(row, col) == GameEnum.EMPTY;
+        return At(row, col) == Sprite.EMPTY;
     }
 
     private void Upgrade(int row, int col) {
-        if ((At(row, col) == GameEnum.BLACK_CHECKER
-                || At(row, col) == GameEnum.BLACK_CHECKER_H)
+        if ((At(row, col) == Sprite.BLACK_CHECKER
+                || At(row, col) == Sprite.BLACK_CHECKER_H)
                 && col == squaresPerSide - 1) {
-            Set(row, col, GameEnum.BLACK_CHECKER_S);
+            Set(row, col, Sprite.BLACK_CHECKER_S);
         }
-        if ((At(row, col) == GameEnum.RED_CHECKER
-                || At(row, col) == GameEnum.RED_CHECKER_H)
+        if ((At(row, col) == Sprite.RED_CHECKER
+                || At(row, col) == Sprite.RED_CHECKER_H)
                 && col == 0) {
-            Set(row, col, GameEnum.RED_CHECKER_S);
+            Set(row, col, Sprite.RED_CHECKER_S);
         }
     }
 
     private void renderHints(int row, int col) {
         // show potential moves for REGULAR CHECKER, here direction matters
-        if (At(row, col) == GameEnum.BLACK_CHECKER_H) {
+        if (At(row, col) == Sprite.BLACK_CHECKER_H) {
             if (isEmpty(row + 1, col + 1)) {
-                Set(row + 1, col + 1, GameEnum.EMPTY_NEXT);
+                Set(row + 1, col + 1, Sprite.EMPTY_NEXT);
             }
             if (isEmpty(row - 1, col + 1)) {
-                Set(row - 1, col + 1, GameEnum.EMPTY_NEXT);
+                Set(row - 1, col + 1, Sprite.EMPTY_NEXT);
             }
         }
 
-        if (At(row, col) == GameEnum.RED_CHECKER_H) {
+        if (At(row, col) == Sprite.RED_CHECKER_H) {
             if (isEmpty(row + 1, col - 1)) {
-                Set(row + 1, col - 1, GameEnum.EMPTY_NEXT);
+                Set(row + 1, col - 1, Sprite.EMPTY_NEXT);
             }
             if (isEmpty(row - 1, col - 1)) {
-                Set(row - 1, col - 1, GameEnum.EMPTY_NEXT);
+                Set(row - 1, col - 1, Sprite.EMPTY_NEXT);
             }
         }
 
         // show winning moves for REGULAR CHECKERS
-        if (At(row, col) == GameEnum.BLACK_CHECKER_H) {
-            if (isEmpty(row + 2, col + 2) && (At(row + 1, col + 1) == GameEnum.RED_CHECKER)
-                    || At(row + 1, col + 1) == GameEnum.RED_CHECKER_S) {
-                Set(row + 2, col + 2, GameEnum.SCORE);
+        if (At(row, col) == Sprite.BLACK_CHECKER_H) {
+            if (isEmpty(row + 2, col + 2) && (At(row + 1, col + 1) == Sprite.RED_CHECKER)
+                    || At(row + 1, col + 1) == Sprite.RED_CHECKER_S) {
+                Set(row + 2, col + 2, Sprite.SCORE);
             }
-            if (isEmpty(row - 2, col + 2) && (At(row - 1, col + 1) == GameEnum.RED_CHECKER
-                    || At(row - 1, col + 1) == GameEnum.RED_CHECKER_S)) {
-                Set(row - 2, col + 2, GameEnum.SCORE);
+            if (isEmpty(row - 2, col + 2) && (At(row - 1, col + 1) == Sprite.RED_CHECKER
+                    || At(row - 1, col + 1) == Sprite.RED_CHECKER_S)) {
+                Set(row - 2, col + 2, Sprite.SCORE);
             }
         }
 
-        if (At(row, col) == GameEnum.RED_CHECKER_H) {
-            if (isEmpty(row + 2, col - 2) && (At(row + 1, col - 1) == GameEnum.BLACK_CHECKER
-                    || At(row + 1, col - 1) == GameEnum.BLACK_CHECKER_S)) {
-                Set(row + 2, col - 2, GameEnum.SCORE);
+        if (At(row, col) == Sprite.RED_CHECKER_H) {
+            if (isEmpty(row + 2, col - 2) && (At(row + 1, col - 1) == Sprite.BLACK_CHECKER
+                    || At(row + 1, col - 1) == Sprite.BLACK_CHECKER_S)) {
+                Set(row + 2, col - 2, Sprite.SCORE);
 
             }
-            if (isEmpty(row - 2, col - 2) && (At(row - 1, col - 1) == GameEnum.BLACK_CHECKER
-                    || At(row - 1, col - 1) == GameEnum.BLACK_CHECKER_S)) {
-                Set(row - 2, col - 2, GameEnum.SCORE);
+            if (isEmpty(row - 2, col - 2) && (At(row - 1, col - 1) == Sprite.BLACK_CHECKER
+                    || At(row - 1, col - 1) == Sprite.BLACK_CHECKER_S)) {
+                Set(row - 2, col - 2, Sprite.SCORE);
             }
         }
 
         // show potential moves for SUPER CHECKER, direction doesn't matter
-        if (At(row, col) == GameEnum.RED_CHECKER_S_H
-                || At(row, col) == GameEnum.BLACK_CHECKER_S_H) {
+        if (At(row, col) == Sprite.RED_CHECKER_S_H
+                || At(row, col) == Sprite.BLACK_CHECKER_S_H) {
             if (isEmpty(row + 1, col - 1)) {
-                Set(row + 1, col - 1, GameEnum.EMPTY_NEXT);
+                Set(row + 1, col - 1, Sprite.EMPTY_NEXT);
             }
             if (isEmpty(row - 1, col - 1)) {
-                Set(row - 1, col - 1, GameEnum.EMPTY_NEXT);
+                Set(row - 1, col - 1, Sprite.EMPTY_NEXT);
             }
             if (isEmpty(row + 1, col + 1)) {
-                Set(row + 1, col + 1, GameEnum.EMPTY_NEXT);
+                Set(row + 1, col + 1, Sprite.EMPTY_NEXT);
             }
             if (isEmpty(row - 1, col + 1)) {
-                Set(row - 1, col + 1, GameEnum.EMPTY_NEXT);
+                Set(row - 1, col + 1, Sprite.EMPTY_NEXT);
             }
         }
 
         // show winning moves for SUPER CHECKERS
-        if (At(row, col) == GameEnum.BLACK_CHECKER_S_H) {
-            if (isEmpty(row + 2, col + 2) && (At(row + 1, col + 1) == GameEnum.RED_CHECKER
-                    || At(row + 1, col + 1) == GameEnum.RED_CHECKER_S)) {
-                Set(row + 2, col + 2, GameEnum.SCORE);
+        if (At(row, col) == Sprite.BLACK_CHECKER_S_H) {
+            if (isEmpty(row + 2, col + 2) && (At(row + 1, col + 1) == Sprite.RED_CHECKER
+                    || At(row + 1, col + 1) == Sprite.RED_CHECKER_S)) {
+                Set(row + 2, col + 2, Sprite.SCORE);
             }
-            if (isEmpty(row - 2, col + 2) && (At(row - 1, col + 1) == GameEnum.RED_CHECKER
-                    || At(row - 1, col + 1) == GameEnum.RED_CHECKER_S)) {
-                Set(row - 2, col + 2, GameEnum.SCORE);
+            if (isEmpty(row - 2, col + 2) && (At(row - 1, col + 1) == Sprite.RED_CHECKER
+                    || At(row - 1, col + 1) == Sprite.RED_CHECKER_S)) {
+                Set(row - 2, col + 2, Sprite.SCORE);
             }
-            if (isEmpty(row + 2, col - 2) && (At(row + 1, col - 1) == GameEnum.RED_CHECKER
-                    || At(row + 1, col - 1) == GameEnum.RED_CHECKER_S)) {
-                Set(row + 2, col - 2, GameEnum.SCORE);
+            if (isEmpty(row + 2, col - 2) && (At(row + 1, col - 1) == Sprite.RED_CHECKER
+                    || At(row + 1, col - 1) == Sprite.RED_CHECKER_S)) {
+                Set(row + 2, col - 2, Sprite.SCORE);
             }
-            if (isEmpty(row - 2, col - 2) && (At(row - 1, col - 1) == GameEnum.RED_CHECKER
-                    || At(row - 1, col - 1) == GameEnum.RED_CHECKER_S)) {
-                Set(row - 2, col - 2, GameEnum.SCORE);
+            if (isEmpty(row - 2, col - 2) && (At(row - 1, col - 1) == Sprite.RED_CHECKER
+                    || At(row - 1, col - 1) == Sprite.RED_CHECKER_S)) {
+                Set(row - 2, col - 2, Sprite.SCORE);
             }
         }
 
-        if (At(row, col) == GameEnum.RED_CHECKER_S_H) {
-            if (isEmpty(row + 2, col + 2) && (At(row + 1, col + 1) == GameEnum.BLACK_CHECKER
-                    || At(row + 1, col + 1) == GameEnum.BLACK_CHECKER_S)) {
-                Set(row + 2, col + 2, GameEnum.SCORE);
+        if (At(row, col) == Sprite.RED_CHECKER_S_H) {
+            if (isEmpty(row + 2, col + 2) && (At(row + 1, col + 1) == Sprite.BLACK_CHECKER
+                    || At(row + 1, col + 1) == Sprite.BLACK_CHECKER_S)) {
+                Set(row + 2, col + 2, Sprite.SCORE);
             }
-            if (isEmpty(row - 2, col + 2) && (At(row - 1, col + 1) == GameEnum.BLACK_CHECKER
-                    || At(row - 1, col + 1) == GameEnum.BLACK_CHECKER_S)) {
-                Set(row - 2, col + 2, GameEnum.SCORE);
+            if (isEmpty(row - 2, col + 2) && (At(row - 1, col + 1) == Sprite.BLACK_CHECKER
+                    || At(row - 1, col + 1) == Sprite.BLACK_CHECKER_S)) {
+                Set(row - 2, col + 2, Sprite.SCORE);
             }
-            if (isEmpty(row + 2, col - 2) && (At(row + 1, col - 1) == GameEnum.BLACK_CHECKER
-                    || At(row + 1, col - 1) == GameEnum.BLACK_CHECKER_S)) {
-                Set(row + 2, col - 2, GameEnum.SCORE);
+            if (isEmpty(row + 2, col - 2) && (At(row + 1, col - 1) == Sprite.BLACK_CHECKER
+                    || At(row + 1, col - 1) == Sprite.BLACK_CHECKER_S)) {
+                Set(row + 2, col - 2, Sprite.SCORE);
             }
-            if (isEmpty(row - 2, col - 2) && (At(row - 1, col - 1) == GameEnum.BLACK_CHECKER
-                    || At(row - 1, col - 1) == GameEnum.BLACK_CHECKER_S)) {
-                Set(row - 2, col - 2, GameEnum.SCORE);
+            if (isEmpty(row - 2, col - 2) && (At(row - 1, col - 1) == Sprite.BLACK_CHECKER
+                    || At(row - 1, col - 1) == Sprite.BLACK_CHECKER_S)) {
+                Set(row - 2, col - 2, Sprite.SCORE);
             }
         }
     }
@@ -280,28 +294,28 @@ public final class GameEngine {
         for (int row = 0; row < squaresPerSide; row++) {
             for (int col = 0; col < squaresPerSide; col++) {
                 if ((row % 2 == 1 && col % 2 == 0) || (row % 2 != 1 && col % 2 != 0)) {
-                    if (At(row, col) == GameEnum.EMPTY_NEXT
-                            || At(row, col) == GameEnum.SCORE) {
-                        Set(row, col, GameEnum.EMPTY);
+                    if (At(row, col) == Sprite.EMPTY_NEXT
+                            || At(row, col) == Sprite.SCORE) {
+                        Set(row, col, Sprite.EMPTY);
                     }
-                    if (At(row, col) == GameEnum.BLACK_CHECKER_H) {
-                        Set(row, col, GameEnum.BLACK_CHECKER);
+                    if (At(row, col) == Sprite.BLACK_CHECKER_H) {
+                        Set(row, col, Sprite.BLACK_CHECKER);
                     }
-                    if (At(row, col) == GameEnum.RED_CHECKER_H) {
-                        Set(row, col, GameEnum.RED_CHECKER);
+                    if (At(row, col) == Sprite.RED_CHECKER_H) {
+                        Set(row, col, Sprite.RED_CHECKER);
                     }
-                    if (At(row, col) == GameEnum.BLACK_CHECKER_S_H) {
-                        Set(row, col, GameEnum.BLACK_CHECKER_S);
+                    if (At(row, col) == Sprite.BLACK_CHECKER_S_H) {
+                        Set(row, col, Sprite.BLACK_CHECKER_S);
                     }
-                    if (At(row, col) == GameEnum.RED_CHECKER_S_H) {
-                        Set(row, col, GameEnum.RED_CHECKER_S);
+                    if (At(row, col) == Sprite.RED_CHECKER_S_H) {
+                        Set(row, col, Sprite.RED_CHECKER_S);
                     }
                 }
             }
         }
     }
 
-    private CheckerPieces findFirst(GameEnum g) {
+    private CheckerPieces findFirst(Sprite g) {
         CheckerPieces result = new CheckerPieces();
 
         result.checkerPiece = g;
@@ -320,11 +334,11 @@ public final class GameEngine {
     }
 
     private CheckerPieces findPlayer() {
-        for (GameEnum g : new GameEnum[]{
-            GameEnum.BLACK_CHECKER_H,
-            GameEnum.BLACK_CHECKER_S_H,
-            GameEnum.RED_CHECKER_H,
-            GameEnum.RED_CHECKER_S_H}) {
+        for (Sprite g : new Sprite[]{
+            Sprite.BLACK_CHECKER_H,
+            Sprite.BLACK_CHECKER_S_H,
+            Sprite.RED_CHECKER_H,
+            Sprite.RED_CHECKER_S_H}) {
             CheckerPieces p = findFirst(g);
             if (p.col != -1) {
                 return p;
@@ -338,14 +352,14 @@ public final class GameEngine {
      *
      * @return
      */
-    public GameEnum[][] GenEmptyBoardState() {
-        GameEnum[][] board = new GameEnum[squaresPerSide][squaresPerSide];
+    public Sprite[][] GenEmptyBoardState() {
+        Sprite[][] board = new Sprite[squaresPerSide][squaresPerSide];
         for (int row = 0; row < squaresPerSide; row++) {
             for (int col = 0; col < squaresPerSide; col++) {
                 if ((row % 2 == 1 && col % 2 == 0) || (row % 2 != 1 && col % 2 != 0)) {
-                    board[row][col] = GameEnum.EMPTY;
+                    board[row][col] = Sprite.EMPTY;
                 } else {
-                    board[row][col] = GameEnum.INVALID;
+                    board[row][col] = Sprite.INVALID;
                 }
             }
         }
@@ -355,15 +369,15 @@ public final class GameEngine {
     /**
      * Place checker pieces
      */
-    private void InitCheckers(GameEnum[][] board) {
+    public void InitCheckers() {
         for (int row = 0; row < squaresPerSide; row++) {
             for (int col = 0; col < squaresPerSide; col++) {
                 if ((row % 2 == 1 && col % 2 == 0) || (row % 2 != 1 && col % 2 != 0)) {
                     if (row < 3) {
-                        board[col][row] = GameEnum.BLACK_CHECKER;
+                        board[col][row] = Sprite.BLACK_CHECKER;
                     }
                     if (row > 4) {
-                        board[col][row] = GameEnum.RED_CHECKER;
+                        board[col][row] = Sprite.RED_CHECKER;
                     }
                 }
             }
@@ -375,8 +389,8 @@ public final class GameEngine {
      *
      * @return
      */
-    public GameEnum[][] getState() {
-        return gameState;
+    public Sprite[][] getState() {
+        return board;
     }
 
     /**
@@ -387,10 +401,10 @@ public final class GameEngine {
      * @return
      */
     public boolean isRed(int row, int col) {
-        return At(row, col) == GameEnum.RED_CHECKER
-                || At(row, col) == GameEnum.RED_CHECKER_H
-                || At(row, col) == GameEnum.RED_CHECKER_S
-                || At(row, col) == GameEnum.RED_CHECKER_S_H;
+        return At(row, col) == Sprite.RED_CHECKER
+                || At(row, col) == Sprite.RED_CHECKER_H
+                || At(row, col) == Sprite.RED_CHECKER_S
+                || At(row, col) == Sprite.RED_CHECKER_S_H;
     }
 
     /**
@@ -401,43 +415,34 @@ public final class GameEngine {
      * @return
      */
     public boolean isBlack(int row, int col) {
-        return At(row, col) == GameEnum.BLACK_CHECKER
-                || At(row, col) == GameEnum.BLACK_CHECKER_H
-                || At(row, col) == GameEnum.BLACK_CHECKER_S
-                || At(row, col) == GameEnum.BLACK_CHECKER_S_H;
+        return At(row, col) == Sprite.BLACK_CHECKER
+                || At(row, col) == Sprite.BLACK_CHECKER_H
+                || At(row, col) == Sprite.BLACK_CHECKER_S
+                || At(row, col) == Sprite.BLACK_CHECKER_S_H;
     }
 
     /**
-     * Returns black side score
+     * Returns side score
      *
+     * @param side
      * @return
      */
-    public int getBlackScore() {
+    public int getScore(GameEnum side) {
         int score = 12;
         for (int row = 0; row < squaresPerSide; row++) {
             for (int col = 0; col < squaresPerSide; col++) {
-                if (isRed(row, col)) {
+                if (side == GameEnum.RED && isRed(row, col)) {
+                    score--;
+                } else if (side == GameEnum.BLACK && isBlack(row, col)) {
                     score--;
                 }
             }
         }
-        return score;
-    }
 
-    /**
-     * Returns red side score
-     *
-     * @return
-     */
-    public int getRedScore() {
-        int score = 12;
-        for (int row = 0; row < squaresPerSide; row++) {
-            for (int col = 0; col < squaresPerSide; col++) {
-                if (isBlack(row, col)) {
-                    score--;
-                }
-            }
+        if (score > 11) {
+            gameState = GameEnum.GAME_OVER;
         }
+
         return score;
     }
 }

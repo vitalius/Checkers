@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 vitaliy.
+ * Copyright 2014 Vitaliy Pavlenko.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,14 +24,20 @@
 package com.softwerry.checkers;
 
 /**
- * Identifies game state
- *
- * @author vitaliy
+ * Various checker game enumerations
  */
-public enum GameEnum {
+public enum Sprite {
 
-    PLAY,
-    GAME_OVER,
-    RED,
-    BLACK
+    INVALID,
+    SCORE,
+    EMPTY,
+    EMPTY_NEXT,
+    RED_CHECKER,
+    RED_CHECKER_H,
+    RED_CHECKER_S,
+    RED_CHECKER_S_H,
+    BLACK_CHECKER,
+    BLACK_CHECKER_H,
+    BLACK_CHECKER_S,
+    BLACK_CHECKER_S_H
 }

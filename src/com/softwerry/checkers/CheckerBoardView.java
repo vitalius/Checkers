@@ -23,7 +23,9 @@
  */
 package com.softwerry.checkers;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
@@ -33,7 +35,7 @@ import android.view.View;
 /**
  * Checker board View
  */
-public class CheckerBoardView extends View {
+public final class CheckerBoardView extends View {
 
     private final BoardAssetFactory squareFactory;
     private final int squaresPerSide = 8;
@@ -48,32 +50,51 @@ public class CheckerBoardView extends View {
 
     /**
      * Instantiate board View, given the screen size and activity context
+     *
+     * @param context
+     * @param attrs
      */
     public CheckerBoardView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         int width = SimpleCheckersActivity.SCREEN_X;
         int height = SimpleCheckersActivity.SCREEN_Y;
-
         int minSide = Math.min(width, height);
         squareWidth = (int) Math.floor(minSide / (float) squaresPerSide);
-        squareFactory = new BoardAssetFactory(squareWidth);
-        gameEngine = new GameEngine();
-        randomAI = new CheckerAI();
 
         // find translation points for centering the board
         tx = (int) Math.round(width / 2.0 - squareWidth * squaresPerSide / 2.0);
         ty = (int) Math.round(height / 2.0 - squareWidth * squaresPerSide / 2.0);
+        squareFactory = new BoardAssetFactory(squareWidth);
+        gameEngine = new GameEngine(squaresPerSide);
+        randomAI = new CheckerAI();
 
+        AddClickListener();
+    }
+
+    /**
+     * Add click listener
+     */
+    public void AddClickListener() {
         // capture square touching
-        this.setOnTouchListener(new View.OnTouchListener() {
+        setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                if (gameEngine.gameState != GameEnum.PLAY) {
+                    return false;
+                }
+
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     int row = getSquareRow(event);
                     int col = getSquareCol(event);
                     if (gameEngine.Click(row, col)) {
+                        if (gameEngine.getScore(GameEnum.RED) > 11) {
+                            ShowAlert(v, "Red win!");
+                        }
                         randomAI.RandomMove(gameEngine, false);
+                        if (gameEngine.getScore(GameEnum.BLACK) > 11) {
+                            ShowAlert(v, "Black win!");
+                        }
                     }
                 }
                 v.invalidate();
@@ -101,6 +122,25 @@ public class CheckerBoardView extends View {
     }
 
     /**
+     * Display Alert box
+     *
+     * @param v
+     * @param s
+     */
+    public void ShowAlert(final View v, String s) {
+        new AlertDialog.Builder(v.getContext())
+                .setTitle(s)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        gameEngine = new GameEngine(squaresPerSide);
+                        v.invalidate();
+                    }
+                })
+                .setIcon(android.R.drawable.star_on)
+                .show();
+    }
+
+    /**
      * Render game board
      *
      * @param canvas
@@ -117,7 +157,9 @@ public class CheckerBoardView extends View {
         }
 
         // update the score
-        SimpleCheckersActivity.redScore.setText("Red score: " + gameEngine.getRedScore());
-        SimpleCheckersActivity.blackScore.setText("Black score: " + gameEngine.getBlackScore());
+        SimpleCheckersActivity.redScore
+                .setText("Red score: " + gameEngine.getScore(GameEnum.RED));
+        SimpleCheckersActivity.blackScore
+                .setText("Black score: " + gameEngine.getScore(GameEnum.BLACK));
     }
 }

@@ -68,8 +68,8 @@ public final class CheckerAI {
         LinkedList<int[]> result = new LinkedList<int[]>();
         for (int row = 0; row < e.squaresPerSide; row++) {
             for (int col = 0; col < e.squaresPerSide; col++) {
-                if (e.At(row, col) == GameEnum.EMPTY_NEXT
-                        || e.At(row, col) == GameEnum.SCORE) {
+                if (e.At(row, col) == Sprite.EMPTY_NEXT
+                        || e.At(row, col) == Sprite.SCORE) {
                     result.add(new int[]{row, col});
                 }
             }
@@ -117,7 +117,7 @@ public final class CheckerAI {
         if (e.isEmpty(row + 1, col + 1)) {
             return true;
         }
-        if (e.At(row, col) == GameEnum.BLACK_CHECKER_S) {
+        if (e.At(row, col) == Sprite.BLACK_CHECKER_S) {
             if (e.isEmpty(row - 1, col - 1)) {
                 return true;
             }
@@ -133,7 +133,7 @@ public final class CheckerAI {
         if (e.isRed(row + 1, col + 1) && e.isEmpty(row + 2, col + 2)) {
             return true;
         }
-        if (e.At(row, col) == GameEnum.BLACK_CHECKER_S) {
+        if (e.At(row, col) == Sprite.BLACK_CHECKER_S) {
             if (e.isRed(row - 1, col - 1) && e.isEmpty(row - 2, col - 2)) {
                 return true;
             }
@@ -160,7 +160,7 @@ public final class CheckerAI {
         if (e.isEmpty(row + 1, col - 1)) {
             return true;
         }
-        if (e.At(row, col) == GameEnum.RED_CHECKER_S) {
+        if (e.At(row, col) == Sprite.RED_CHECKER_S) {
             if (e.isEmpty(row - 1, col + 1)) {
                 return true;
             }
@@ -176,7 +176,7 @@ public final class CheckerAI {
         if (e.isBlack(row + 1, col - 1) && e.isEmpty(row + 2, col - 2)) {
             return true;
         }
-        if (e.At(row, col) == GameEnum.RED_CHECKER_S) {
+        if (e.At(row, col) == Sprite.RED_CHECKER_S) {
             if (e.isBlack(row - 1, col - 1) && e.isEmpty(row - 2, col - 2)) {
                 return true;
             }

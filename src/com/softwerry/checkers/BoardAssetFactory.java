@@ -38,7 +38,7 @@ import java.util.Map;
 public class BoardAssetFactory {
 
     private final int sideLength;
-    private final Map<GameEnum, Bitmap> cache = new EnumMap<GameEnum, Bitmap>(GameEnum.class);
+    private final Map<Sprite, Bitmap> cache = new EnumMap<Sprite, Bitmap>(Sprite.class);
     private final float fHalfSide;
     private final float fCheckerR;
 
@@ -49,56 +49,56 @@ public class BoardAssetFactory {
     }
 
     public Bitmap BlackSquare() {
-        if (cache.containsKey(GameEnum.EMPTY)) {
-            return cache.get(GameEnum.EMPTY);
+        if (cache.containsKey(Sprite.EMPTY)) {
+            return cache.get(Sprite.EMPTY);
         }
         Bitmap square = Bitmap.createBitmap(
                 sideLength, sideLength, Bitmap.Config.ARGB_8888);
         square.eraseColor(Color.DKGRAY);
 
-        cache.put(GameEnum.EMPTY, square);
+        cache.put(Sprite.EMPTY, square);
         return square;
     }
 
     public Bitmap WhiteSquare() {
-        if (cache.containsKey(GameEnum.INVALID)) {
-            return cache.get(GameEnum.INVALID);
+        if (cache.containsKey(Sprite.INVALID)) {
+            return cache.get(Sprite.INVALID);
         }
         Bitmap square = Bitmap.createBitmap(
                 sideLength, sideLength, Bitmap.Config.ARGB_8888);
         square.eraseColor(Color.WHITE);
 
-        cache.put(GameEnum.INVALID, square);
+        cache.put(Sprite.INVALID, square);
         return square;
     }
 
     public Bitmap NextMoveSquare() {
-        if (cache.containsKey(GameEnum.EMPTY_NEXT)) {
-            return cache.get(GameEnum.EMPTY_NEXT);
+        if (cache.containsKey(Sprite.EMPTY_NEXT)) {
+            return cache.get(Sprite.EMPTY_NEXT);
         }
         Bitmap square = Bitmap.createBitmap(
                 sideLength, sideLength, Bitmap.Config.ARGB_8888);
         square.eraseColor(Color.GRAY);
 
-        cache.put(GameEnum.EMPTY_NEXT, square);
+        cache.put(Sprite.EMPTY_NEXT, square);
         return square;
     }
 
     public Bitmap ScoreSquare() {
-        if (cache.containsKey(GameEnum.SCORE)) {
-            return cache.get(GameEnum.SCORE);
+        if (cache.containsKey(Sprite.SCORE)) {
+            return cache.get(Sprite.SCORE);
         }
         Bitmap square = Bitmap.createBitmap(
                 sideLength, sideLength, Bitmap.Config.ARGB_8888);
         square.eraseColor(Color.LTGRAY);
 
-        cache.put(GameEnum.SCORE, square);
+        cache.put(Sprite.SCORE, square);
         return square;
     }
 
     public Bitmap RedChecker() {
-        if (cache.containsKey(GameEnum.RED_CHECKER)) {
-            return cache.get(GameEnum.RED_CHECKER);
+        if (cache.containsKey(Sprite.RED_CHECKER)) {
+            return cache.get(Sprite.RED_CHECKER);
         }
 
         Bitmap square = Bitmap.createBitmap(
@@ -118,13 +118,13 @@ public class BoardAssetFactory {
         white.setStrokeWidth(1.5f);
         c.drawCircle(fHalfSide, fHalfSide, fCheckerR, white);
 
-        cache.put(GameEnum.RED_CHECKER, square);
+        cache.put(Sprite.RED_CHECKER, square);
         return square;
     }
 
     public Bitmap RedCheckerHighlighted() {
-        if (cache.containsKey(GameEnum.RED_CHECKER_H)) {
-            return cache.get(GameEnum.RED_CHECKER_H);
+        if (cache.containsKey(Sprite.RED_CHECKER_H)) {
+            return cache.get(Sprite.RED_CHECKER_H);
         }
 
         // start with red checker
@@ -138,13 +138,13 @@ public class BoardAssetFactory {
         highlight.setColor(Color.WHITE);
         c.drawCircle(fHalfSide, fHalfSide, fCheckerR, highlight);
 
-        cache.put(GameEnum.RED_CHECKER_H, square);
+        cache.put(Sprite.RED_CHECKER_H, square);
         return square;
     }
 
     public Bitmap RedSuperChecker() {
-        if (cache.containsKey(GameEnum.RED_CHECKER_S)) {
-            return cache.get(GameEnum.RED_CHECKER_S);
+        if (cache.containsKey(Sprite.RED_CHECKER_S)) {
+            return cache.get(Sprite.RED_CHECKER_S);
         }
         // start with red checker
         Bitmap square = Bitmap.createBitmap(RedChecker());
@@ -157,13 +157,13 @@ public class BoardAssetFactory {
         superMark.setColor(Color.YELLOW);
         c.drawCircle(fHalfSide, fHalfSide, fCheckerR * 0.1f, superMark);
 
-        cache.put(GameEnum.RED_CHECKER_S, square);
+        cache.put(Sprite.RED_CHECKER_S, square);
         return square;
     }
 
     public Bitmap RedSuperCheckerHighlighted() {
-        if (cache.containsKey(GameEnum.RED_CHECKER_S_H)) {
-            return cache.get(GameEnum.RED_CHECKER_S_H);
+        if (cache.containsKey(Sprite.RED_CHECKER_S_H)) {
+            return cache.get(Sprite.RED_CHECKER_S_H);
         }
         // start with red super checker
         Bitmap square = Bitmap.createBitmap(RedSuperChecker());
@@ -176,13 +176,13 @@ public class BoardAssetFactory {
         highlight.setColor(Color.WHITE);
         c.drawCircle(fHalfSide, fHalfSide, fCheckerR, highlight);
 
-        cache.put(GameEnum.RED_CHECKER_S_H, square);
+        cache.put(Sprite.RED_CHECKER_S_H, square);
         return square;
     }
 
     public Bitmap BlackChecker() {
-        if (cache.containsKey(GameEnum.BLACK_CHECKER)) {
-            return cache.get(GameEnum.BLACK_CHECKER);
+        if (cache.containsKey(Sprite.BLACK_CHECKER)) {
+            return cache.get(Sprite.BLACK_CHECKER);
         }
         Bitmap square = Bitmap.createBitmap(
                 sideLength, sideLength, Bitmap.Config.ARGB_8888);
@@ -201,13 +201,13 @@ public class BoardAssetFactory {
         border.setStrokeWidth(1.5f);
         c.drawCircle(fHalfSide, fHalfSide, fCheckerR, border);
 
-        cache.put(GameEnum.BLACK_CHECKER, square);
+        cache.put(Sprite.BLACK_CHECKER, square);
         return square;
     }
 
     public Bitmap BlackCheckerHighlighted() {
-        if (cache.containsKey(GameEnum.BLACK_CHECKER_H)) {
-            return cache.get(GameEnum.BLACK_CHECKER_H);
+        if (cache.containsKey(Sprite.BLACK_CHECKER_H)) {
+            return cache.get(Sprite.BLACK_CHECKER_H);
         }
 
         // start with black checker
@@ -221,13 +221,13 @@ public class BoardAssetFactory {
         highlight.setColor(Color.WHITE);
         c.drawCircle(fHalfSide, fHalfSide, fCheckerR, highlight);
 
-        cache.put(GameEnum.BLACK_CHECKER_H, square);
+        cache.put(Sprite.BLACK_CHECKER_H, square);
         return square;
     }
 
     public Bitmap BlackSuperChecker() {
-        if (cache.containsKey(GameEnum.BLACK_CHECKER_S)) {
-            return cache.get(GameEnum.BLACK_CHECKER_S);
+        if (cache.containsKey(Sprite.BLACK_CHECKER_S)) {
+            return cache.get(Sprite.BLACK_CHECKER_S);
         }
 
         // start with black checker
@@ -241,13 +241,13 @@ public class BoardAssetFactory {
         superMark.setColor(Color.YELLOW);
         c.drawCircle(fHalfSide, fHalfSide, fCheckerR * 0.1f, superMark);
 
-        cache.put(GameEnum.BLACK_CHECKER_S, square);
+        cache.put(Sprite.BLACK_CHECKER_S, square);
         return square;
     }
 
     public Bitmap BlackSuperCheckerHighlighted() {
-        if (cache.containsKey(GameEnum.BLACK_CHECKER_S_H)) {
-            return cache.get(GameEnum.BLACK_CHECKER_S_H);
+        if (cache.containsKey(Sprite.BLACK_CHECKER_S_H)) {
+            return cache.get(Sprite.BLACK_CHECKER_S_H);
         }
 
         // start with black checker
@@ -261,52 +261,52 @@ public class BoardAssetFactory {
         highlight.setColor(Color.WHITE);
         c.drawCircle(fHalfSide, fHalfSide, fCheckerR, highlight);
 
-        cache.put(GameEnum.BLACK_CHECKER_S_H, square);
+        cache.put(Sprite.BLACK_CHECKER_S_H, square);
         return square;
     }
 
-    public Bitmap GetSquare(GameEnum e) {
-        if (e == GameEnum.INVALID) {
+    public Bitmap GetSquare(Sprite e) {
+        if (e == Sprite.INVALID) {
             return WhiteSquare();
         }
 
-        if (e == GameEnum.SCORE) {
+        if (e == Sprite.SCORE) {
             return ScoreSquare();
         }
 
-        if (e == GameEnum.RED_CHECKER) {
+        if (e == Sprite.RED_CHECKER) {
             return RedChecker();
         }
 
-        if (e == GameEnum.RED_CHECKER_S) {
+        if (e == Sprite.RED_CHECKER_S) {
             return RedSuperChecker();
         }
 
-        if (e == GameEnum.RED_CHECKER_H) {
+        if (e == Sprite.RED_CHECKER_H) {
             return RedCheckerHighlighted();
         }
 
-        if (e == GameEnum.RED_CHECKER_S_H) {
+        if (e == Sprite.RED_CHECKER_S_H) {
             return RedSuperCheckerHighlighted();
         }
 
-        if (e == GameEnum.BLACK_CHECKER) {
+        if (e == Sprite.BLACK_CHECKER) {
             return BlackChecker();
         }
 
-        if (e == GameEnum.BLACK_CHECKER_H) {
+        if (e == Sprite.BLACK_CHECKER_H) {
             return BlackCheckerHighlighted();
         }
 
-        if (e == GameEnum.BLACK_CHECKER_S) {
+        if (e == Sprite.BLACK_CHECKER_S) {
             return BlackSuperChecker();
         }
 
-        if (e == GameEnum.BLACK_CHECKER_S_H) {
+        if (e == Sprite.BLACK_CHECKER_S_H) {
             return BlackSuperCheckerHighlighted();
         }
 
-        if (e == GameEnum.EMPTY_NEXT) {
+        if (e == Sprite.EMPTY_NEXT) {
             return NextMoveSquare();
         }
         return BlackSquare();

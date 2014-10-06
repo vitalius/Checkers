@@ -29,7 +29,7 @@ import android.test.suitebuilder.annotation.MediumTest;
 import android.view.MotionEvent;
 import android.view.View;
 import com.softwerry.checkers.CheckerBoardView;
-import com.softwerry.checkers.GameEnum;
+import com.softwerry.checkers.Sprite;
 import com.softwerry.checkers.R;
 import com.softwerry.checkers.SimpleCheckersActivity;
 
@@ -77,14 +77,14 @@ public class CheckersActivityTest extends ActivityInstrumentationTestCase2<Simpl
         decorView.dispatchTouchEvent(click);
 
         assertSame("First checker is not selected.",
-                GameEnum.RED_CHECKER_H,
+                Sprite.RED_CHECKER_H,
                 checkerBoardView.gameEngine.getState()[clickRow][clickCol]);
 
         assertSame("Next move is not highlighted.",
-                GameEnum.EMPTY_NEXT,
+                Sprite.EMPTY_NEXT,
                 checkerBoardView.gameEngine.getState()[clickRow - 1][clickCol - 1]);
         assertSame("Next move is not highlighted.",
-                GameEnum.EMPTY_NEXT,
+                Sprite.EMPTY_NEXT,
                 checkerBoardView.gameEngine.getState()[clickRow + 1][clickCol - 1]);
         decorView.invalidate();
     }
