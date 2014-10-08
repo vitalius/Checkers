@@ -40,25 +40,25 @@ public final class GameEngine {
 
     public Sprite[][] board;
     public int squaresPerSide = 8;
-    public Sprite currentPlayer;
+    public GameEnum currentPlayer;
     public GameEnum gameState;
 
     public GameEngine() {
         StartNewGame(squaresPerSide);
-        currentPlayer = Sprite.RED_CHECKER;
+        currentPlayer = GameEnum.RED;
     }
 
     public GameEngine(int size) {
         StartNewGame(size);
-        currentPlayer = Sprite.RED_CHECKER;
+        currentPlayer = GameEnum.RED;
     }
 
-    public GameEngine(Sprite firstPlayer, int size) {
+    public GameEngine(GameEnum firstPlayer, int size) {
         StartNewGame(size);
         currentPlayer = firstPlayer;
     }
 
-    public GameEngine(Sprite firstPlayer) {
+    public GameEngine(GameEnum firstPlayer) {
         StartNewGame(squaresPerSide);
         currentPlayer = firstPlayer;
     }
@@ -91,8 +91,8 @@ public final class GameEngine {
             Set(row, col, p.checkerPiece);
             Upgrade(row, col);
             removeHints();
-            currentPlayer = currentPlayer == Sprite.BLACK_CHECKER
-                    ? Sprite.RED_CHECKER : Sprite.BLACK_CHECKER;
+            currentPlayer = currentPlayer == GameEnum.BLACK
+                    ? GameEnum.RED : GameEnum.BLACK;
             return true;
         }
 
@@ -103,14 +103,14 @@ public final class GameEngine {
             Set(row, col, p.checkerPiece);
             Upgrade(row, col);
             removeHints();
-            currentPlayer = currentPlayer == Sprite.BLACK_CHECKER
-                    ? Sprite.RED_CHECKER : Sprite.BLACK_CHECKER;
+            currentPlayer = currentPlayer == GameEnum.BLACK
+                    ? GameEnum.RED : GameEnum.BLACK;
             return true;
         }
 
         // clicked a checker?
         if (At(row, col) == Sprite.BLACK_CHECKER
-                && currentPlayer == Sprite.BLACK_CHECKER) {
+                && currentPlayer == GameEnum.BLACK) {
             removeHints();
             Set(row, col, Sprite.BLACK_CHECKER_H);
             renderHints(row, col);
@@ -118,7 +118,7 @@ public final class GameEngine {
             Set(row, col, Sprite.BLACK_CHECKER);
             removeHints();
         } else if (At(row, col) == Sprite.RED_CHECKER
-                && currentPlayer == Sprite.RED_CHECKER) {
+                && currentPlayer == GameEnum.RED) {
             removeHints();
             Set(row, col, Sprite.RED_CHECKER_H);
             renderHints(row, col);
@@ -126,7 +126,7 @@ public final class GameEngine {
             Set(row, col, Sprite.RED_CHECKER);
             removeHints();
         } else if (At(row, col) == Sprite.RED_CHECKER_S
-                && currentPlayer == Sprite.RED_CHECKER) {
+                && currentPlayer == GameEnum.RED) {
             removeHints();
             Set(row, col, Sprite.RED_CHECKER_S_H);
             renderHints(row, col);
@@ -134,7 +134,7 @@ public final class GameEngine {
             Set(row, col, Sprite.RED_CHECKER_S);
             removeHints();
         } else if (At(row, col) == Sprite.BLACK_CHECKER_S
-                && currentPlayer == Sprite.BLACK_CHECKER) {
+                && currentPlayer == GameEnum.BLACK) {
             removeHints();
             Set(row, col, Sprite.BLACK_CHECKER_S_H);
             renderHints(row, col);
@@ -431,9 +431,9 @@ public final class GameEngine {
         int score = 12;
         for (int row = 0; row < squaresPerSide; row++) {
             for (int col = 0; col < squaresPerSide; col++) {
-                if (side == GameEnum.RED && isRed(row, col)) {
+                if (side == GameEnum.RED && isBlack(row, col)) {
                     score--;
-                } else if (side == GameEnum.BLACK && isBlack(row, col)) {
+                } else if (side == GameEnum.BLACK && isRed(row, col)) {
                     score--;
                 }
             }

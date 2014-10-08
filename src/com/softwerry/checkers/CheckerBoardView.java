@@ -26,6 +26,7 @@ package com.softwerry.checkers;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
@@ -37,10 +38,11 @@ import android.view.View;
  */
 public final class CheckerBoardView extends View {
 
-    private final BoardAssetFactory squareFactory;
+    private BoardAssetFactory squareFactory;
     private final int squaresPerSide = 8;
-    public final int squareWidth;
+    public int squareWidth;
     private final Paint paint = new Paint();
+    public AlertDialog currentAlertDialog = null;
 
     public GameEngine gameEngine;
     public CheckerAI randomAI;
@@ -128,7 +130,7 @@ public final class CheckerBoardView extends View {
      * @param s
      */
     public void ShowAlert(final View v, String s) {
-        new AlertDialog.Builder(v.getContext())
+        currentAlertDialog = new AlertDialog.Builder(v.getContext())
                 .setTitle(s)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -138,6 +140,37 @@ public final class CheckerBoardView extends View {
                 })
                 .setIcon(android.R.drawable.star_on)
                 .show();
+    }
+
+    /**
+     * Resize the board on device flip
+     *
+     * @param newConfig
+     */
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            int width = newConfig.screenWidthDp;
+            int height = newConfig.screenHeightDp;
+            int minSide = Math.min(width, height);
+            squareWidth = (int) Math.floor(minSide / (float) squaresPerSide);
+
+            // find translation points for centering the board
+            tx = (int) Math.round(width / 2.0 - squareWidth * squaresPerSide / 2.0);
+            ty = (int) Math.round(height / 2.0 - squareWidth * squaresPerSide / 2.0);
+            squareFactory = new BoardAssetFactory(squareWidth);
+        } else if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            int width = newConfig.screenWidthDp;
+            int height = newConfig.screenHeightDp;
+            int minSide = Math.min(width, height);
+            squareWidth = (int) Math.floor(minSide / (float) squaresPerSide * 0.90);
+
+            // find translation points for centering the board
+            tx = (int) Math.round(width / 2.0 - squareWidth * squaresPerSide / 2.0);
+            ty = (int) Math.round(height / 2.0 - squareWidth * squaresPerSide / 2.0);
+            squareFactory = new BoardAssetFactory(squareWidth);
+        }
     }
 
     /**
