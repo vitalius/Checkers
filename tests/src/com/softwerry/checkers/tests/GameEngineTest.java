@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.softwerry.checkers.tests;
 
 import com.softwerry.checkers.GameEngine;
+import com.softwerry.checkers.GameEnum;
 import com.softwerry.checkers.Sprite;
 import junit.framework.TestCase;
 
@@ -37,7 +37,7 @@ public class GameEngineTest extends TestCase {
      * Verify simple move of a black checker
      */
     public void testBlackCheckerSimpleMoves() {
-        GameEngine checkers = new GameEngine(Sprite.BLACK_CHECKER);
+        GameEngine checkers = new GameEngine(GameEnum.BLACK);
         checkers.board = checkers.GenEmptyBoardState();
         checkers.Set(1, 2, Sprite.BLACK_CHECKER);
 
@@ -48,7 +48,7 @@ public class GameEngineTest extends TestCase {
         assertSame(Sprite.EMPTY, checkers.At(0, 1));
         assertSame(Sprite.EMPTY, checkers.At(2, 1));
 
-        checkers = new GameEngine(Sprite.BLACK_CHECKER);
+        checkers = new GameEngine(GameEnum.BLACK);
         checkers.board = checkers.GenEmptyBoardState();
         checkers.Set(1, 2, Sprite.BLACK_CHECKER);
         checkers.Set(0, 3, Sprite.BLACK_CHECKER);
@@ -59,7 +59,7 @@ public class GameEngineTest extends TestCase {
         assertSame(Sprite.EMPTY_NEXT, checkers.At(2, 3));
 
         // no moves available
-        checkers = new GameEngine(Sprite.BLACK_CHECKER);
+        checkers = new GameEngine(GameEnum.BLACK);
         checkers.board = checkers.GenEmptyBoardState();
         checkers.Set(1, 2, Sprite.BLACK_CHECKER);
         checkers.Set(0, 3, Sprite.BLACK_CHECKER);
@@ -79,7 +79,7 @@ public class GameEngineTest extends TestCase {
      * Verify simple move of a red checker
      */
     public void testRedCheckerSimpleMoves() {
-        GameEngine checkers = new GameEngine(Sprite.RED_CHECKER);
+        GameEngine checkers = new GameEngine(GameEnum.RED);
         checkers.board = checkers.GenEmptyBoardState();
         checkers.Set(1, 6, Sprite.RED_CHECKER);
 
@@ -91,7 +91,7 @@ public class GameEngineTest extends TestCase {
         assertSame(Sprite.EMPTY, checkers.At(0, 7));
         assertSame(Sprite.EMPTY, checkers.At(2, 7));
 
-        checkers = new GameEngine(Sprite.RED_CHECKER);
+        checkers = new GameEngine(GameEnum.RED);
         checkers.board = checkers.GenEmptyBoardState();
         checkers.Set(1, 6, Sprite.RED_CHECKER);
         checkers.Set(0, 5, Sprite.RED_CHECKER);
@@ -102,7 +102,7 @@ public class GameEngineTest extends TestCase {
         assertSame(Sprite.EMPTY_NEXT, checkers.At(2, 5));
 
         // no moves available
-        checkers = new GameEngine(Sprite.RED_CHECKER);
+        checkers = new GameEngine(GameEnum.RED);
         checkers.board = checkers.GenEmptyBoardState();
         checkers.Set(1, 6, Sprite.RED_CHECKER);
         checkers.Set(0, 5, Sprite.RED_CHECKER);
@@ -122,7 +122,7 @@ public class GameEngineTest extends TestCase {
      * Verify red checker jumping over black checker
      */
     public void testRedCheckerJumpMove() {
-        GameEngine checkers = new GameEngine(Sprite.RED_CHECKER);
+        GameEngine checkers = new GameEngine(GameEnum.RED);
         checkers.board = checkers.GenEmptyBoardState();
         checkers.Set(3, 6, Sprite.RED_CHECKER);
         checkers.Set(2, 5, Sprite.BLACK_CHECKER);
@@ -139,10 +139,10 @@ public class GameEngineTest extends TestCase {
     }
 
     /**
-     * Verify king checker simple move 
+     * Verify king checker simple move
      */
     public void testBlackSuperCheckerMove() {
-        GameEngine checkers = new GameEngine(Sprite.BLACK_CHECKER);
+        GameEngine checkers = new GameEngine(GameEnum.BLACK);
         checkers.board = checkers.GenEmptyBoardState();
         checkers.Set(2, 3, Sprite.BLACK_CHECKER_S);
 
@@ -153,7 +153,7 @@ public class GameEngineTest extends TestCase {
         assertSame(Sprite.EMPTY_NEXT, checkers.At(1, 2));
         assertSame(Sprite.EMPTY_NEXT, checkers.At(3, 2));
 
-        checkers = new GameEngine(Sprite.BLACK_CHECKER);
+        checkers = new GameEngine(GameEnum.BLACK);
         checkers.board = checkers.GenEmptyBoardState();
         checkers.Set(2, 3, Sprite.BLACK_CHECKER_S);
         checkers.Set(3, 4, Sprite.RED_CHECKER);
@@ -170,7 +170,7 @@ public class GameEngineTest extends TestCase {
      * Verify red king checker simple move
      */
     public void testRedSuperCheckerMove() {
-        GameEngine checkers = new GameEngine(Sprite.RED_CHECKER);
+        GameEngine checkers = new GameEngine(GameEnum.RED);
         checkers.board = checkers.GenEmptyBoardState();
 
         checkers.Set(2, 5, Sprite.RED_CHECKER_S);
@@ -187,7 +187,7 @@ public class GameEngineTest extends TestCase {
      * Verify possible moves for a red king checker at the border
      */
     public void testRedSuperCheckerEdgeMove() {
-        GameEngine checkers = new GameEngine(Sprite.RED_CHECKER);
+        GameEngine checkers = new GameEngine(GameEnum.RED);
         checkers.board = checkers.GenEmptyBoardState();
         checkers.Set(2, 7, Sprite.RED_CHECKER_S);
 
@@ -201,7 +201,7 @@ public class GameEngineTest extends TestCase {
      * Verify red checker jumping black checker
      */
     public void testRedBeatsBlackMove() {
-        GameEngine checkers = new GameEngine(Sprite.RED_CHECKER);
+        GameEngine checkers = new GameEngine(GameEnum.RED);
         checkers.board = checkers.GenEmptyBoardState();
         checkers.Set(3, 6, Sprite.RED_CHECKER);
         checkers.Set(2, 5, Sprite.BLACK_CHECKER);
@@ -221,7 +221,7 @@ public class GameEngineTest extends TestCase {
      * Verify black checker jumping red checker
      */
     public void testBlackBeatsRedMove() {
-        GameEngine checkers = new GameEngine(Sprite.BLACK_CHECKER);
+        GameEngine checkers = new GameEngine(GameEnum.BLACK);
         checkers.board = checkers.GenEmptyBoardState();
         checkers.Set(3, 6, Sprite.RED_CHECKER);
         checkers.Set(2, 5, Sprite.BLACK_CHECKER);
@@ -241,7 +241,7 @@ public class GameEngineTest extends TestCase {
      * Verify red king checker jumping black checker
      */
     public void testSuperRedBeatsBlackMove() {
-        GameEngine checkers = new GameEngine(Sprite.RED_CHECKER);
+        GameEngine checkers = new GameEngine(GameEnum.RED);
         checkers.board = checkers.GenEmptyBoardState();
         checkers.Set(3, 6, Sprite.RED_CHECKER_S);
         checkers.Set(2, 5, Sprite.BLACK_CHECKER);
@@ -261,7 +261,7 @@ public class GameEngineTest extends TestCase {
      * Verify king black checker jumping red checker
      */
     public void testSuperBlackBeatsRedMove() {
-        GameEngine checkers = new GameEngine(Sprite.BLACK_CHECKER);
+        GameEngine checkers = new GameEngine(GameEnum.BLACK);
         checkers.board = checkers.GenEmptyBoardState();
         checkers.Set(3, 6, Sprite.RED_CHECKER);
         checkers.Set(2, 5, Sprite.BLACK_CHECKER_S);
@@ -281,7 +281,7 @@ public class GameEngineTest extends TestCase {
      * Verify king black checker jumping king red checker
      */
     public void testSuperBlackBeatsSuperRedMove() {
-        GameEngine checkers = new GameEngine(Sprite.BLACK_CHECKER);
+        GameEngine checkers = new GameEngine(GameEnum.BLACK);
         checkers.board = checkers.GenEmptyBoardState();
         checkers.Set(3, 6, Sprite.RED_CHECKER_S);
         checkers.Set(2, 5, Sprite.BLACK_CHECKER_S);
@@ -301,7 +301,7 @@ public class GameEngineTest extends TestCase {
      * Verify king red checker jumping king black checker
      */
     public void testSuperRedBeatsSuperBlackMove() {
-        GameEngine checkers = new GameEngine(Sprite.RED_CHECKER);
+        GameEngine checkers = new GameEngine(GameEnum.RED);
         checkers.board = checkers.GenEmptyBoardState();
         checkers.Set(3, 6, Sprite.RED_CHECKER_S);
         checkers.Set(2, 5, Sprite.BLACK_CHECKER_S);
@@ -321,7 +321,7 @@ public class GameEngineTest extends TestCase {
      * Verify player taking turns. one side can't go twice in a row
      */
     public void testMoveTurns() {
-        GameEngine checkers = new GameEngine(Sprite.RED_CHECKER);
+        GameEngine checkers = new GameEngine(GameEnum.RED);
         checkers.board = checkers.GenEmptyBoardState();
         checkers.Set(3, 6, Sprite.RED_CHECKER);
         checkers.Set(2, 1, Sprite.BLACK_CHECKER);
