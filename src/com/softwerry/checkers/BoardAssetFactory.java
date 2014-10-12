@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.softwerry.checkers;
 
 import android.graphics.Bitmap;
@@ -325,7 +324,7 @@ public class BoardAssetFactory {
 
         for (int i = 0; i < 8; i++) {
             c.drawRect(
-                    fHalfSide *0.5f + (i * fHalfSide ),
+                    fHalfSide * 0.5f + (i * fHalfSide),
                     fHalfSide,
                     1f + (i * fHalfSide),
                     10f,

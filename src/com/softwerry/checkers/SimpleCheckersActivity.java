@@ -26,6 +26,7 @@ package com.softwerry.checkers;
 import android.app.Activity;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 /**
@@ -62,5 +63,13 @@ public class SimpleCheckersActivity extends Activity {
     @Override
     public void finish() {
         super.finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

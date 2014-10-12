@@ -8,6 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/checkerView"
+        android:rotation = "180"
         android:padding="10dp"/>
     <com.softwerry.checkers.CheckerBoardView
         android:layout_width="wrap_content"

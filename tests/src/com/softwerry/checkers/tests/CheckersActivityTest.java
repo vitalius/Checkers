@@ -126,11 +126,11 @@ public class CheckersActivityTest extends ActivityInstrumentationTestCase2<Simpl
         // default score
         assertTrue("Red score string invalid",
                 SimpleCheckersActivity.redScore.getText().toString()
-                .equals("Red score: 0"));
+                .equals("Score: 0"));
 
         assertTrue("Black score string invalid",
                 SimpleCheckersActivity.blackScore.getText().toString()
-                .equals("Black score: 0"));
+                .equals("Score: 0"));
     }
 
     /**

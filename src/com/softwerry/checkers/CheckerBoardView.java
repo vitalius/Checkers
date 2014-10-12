@@ -160,6 +160,7 @@ public final class CheckerBoardView extends View {
             tx = (int) Math.round(width / 2.0 - squareWidth * squaresPerSide / 2.0);
             ty = (int) Math.round(height / 2.0 - squareWidth * squaresPerSide / 2.0);
             squareFactory = new BoardAssetFactory(squareWidth);
+            SimpleCheckersActivity.blackScore.setRotation(180);
         } else if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             int width = newConfig.screenWidthDp;
             int height = newConfig.screenHeightDp;
@@ -170,6 +171,7 @@ public final class CheckerBoardView extends View {
             tx = (int) Math.round(width / 2.0 - squareWidth * squaresPerSide / 2.0);
             ty = (int) Math.round(height / 2.0 - squareWidth * squaresPerSide / 2.0);
             squareFactory = new BoardAssetFactory(squareWidth);
+            SimpleCheckersActivity.blackScore.setRotation(360);
         }
     }
 
@@ -191,8 +193,8 @@ public final class CheckerBoardView extends View {
 
         // update the score
         SimpleCheckersActivity.redScore
-                .setText("Red score: " + gameEngine.getScore(GameEnum.RED));
+                .setText("Score: " + gameEngine.getScore(GameEnum.RED));
         SimpleCheckersActivity.blackScore
-                .setText("Black score: " + gameEngine.getScore(GameEnum.BLACK));
+                .setText("Score: " + gameEngine.getScore(GameEnum.BLACK));
     }
 }
